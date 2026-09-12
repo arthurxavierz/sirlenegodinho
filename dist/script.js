@@ -30,8 +30,18 @@ function closeMenu(){menuButton.classList.remove('active');menuButton.setAttribu
 menuButton.addEventListener('click',()=>{const open=!nav.classList.contains('open');menuButton.classList.toggle('active',open);menuButton.setAttribute('aria-expanded',String(open));nav.classList.toggle('open',open);document.body.classList.toggle('menu-open',open)});
 nav.querySelectorAll('a').forEach(link=>link.addEventListener('click',closeMenu));
 addEventListener('scroll',()=>header.classList.toggle('scrolled',scrollY>34),{passive:true});
-const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target)}}),{threshold:.12,rootMargin:'0px 0px -45px'});
-document.querySelectorAll('.reveal').forEach((element,index)=>{element.style.transitionDelay=`${Math.min(index%4,3)*65}ms`;observer.observe(element)});
+const revealItems=[...document.querySelectorAll('.reveal')];
+const reveal=element=>element.classList.add('visible');
+if('IntersectionObserver' in window){
+  const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){reveal(entry.target);observer.unobserve(entry.target)}}),{threshold:.12,rootMargin:'0px 0px -45px'});
+  revealItems.forEach((element,index)=>{
+    element.style.transitionDelay=`${Math.min(index%4,3)*65}ms`;
+    // o que ja nasce na tela aparece na hora: o hero nao espera o observer
+    if(element.getBoundingClientRect().top<innerHeight*.92) reveal(element); else observer.observe(element);
+  });
+  // rede de seguranca: se o observer nao disparar, nada fica invisivel
+  setTimeout(()=>revealItems.forEach(reveal),2600);
+}else{revealItems.forEach(reveal)}
 const copyButton=document.querySelector('[data-copy-link]');
 const feedback=document.querySelector('.copy-feedback');
 if(copyButton)copyButton.addEventListener('click',async()=>{const url=new URL('./index.html',location.href).href.replace(/index\.html$/,'');try{await navigator.clipboard.writeText(url)}catch{const helper=document.createElement('textarea');helper.value=url;helper.style.position='fixed';helper.style.opacity='0';document.body.appendChild(helper);helper.select();document.execCommand('copy');helper.remove()}feedback.textContent='Endereço copiado. Agora é só compartilhar.'});
