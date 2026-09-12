@@ -19,6 +19,7 @@ dist/                 diretório publicado
 ├── styles.css        identidade visual, responsividade e animações
 ├── script.js         menu mobile, interações e SITE_CONFIG
 ├── analytics.js      Google Analytics 4 (inativo até preencher o ID)
+├── _headers          headers de segurança e cache (Cloudflare Pages e Netlify)
 └── assets/           imagens, favicon, ícones e imagem de compartilhamento
 ```
 
@@ -58,4 +59,6 @@ senão o navegador serve o arquivo antigo.
 
 ## Deploy
 
-Ver [DEPLOY.md](DEPLOY.md).
+Protótipo no **Cloudflare Pages** (grátis, publica a pasta `dist` direto do GitHub) e
+produção no **Netlify** quando o site for aprovado. Passo a passo completo,
+incluindo domínio e DNS: ver [DEPLOY.md](DEPLOY.md).

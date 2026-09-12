@@ -1,0 +1,25 @@
+# Headers do site. Lido pelo Cloudflare Pages e tambem pelo Netlify, entao
+# vale nas duas hospedagens. No Netlify o netlify.toml tem as mesmas regras.
+
+/*
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=(), interest-cohort=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+
+# Assets versionados por caminho: cache longo
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# HTML sempre revalidado (deploy novo aparece na hora)
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+# CSS e JS ficam na raiz e sao versionados por ?v=<hash> no HTML: precisam
+# revalidar, senao o navegador serve o HTML novo com a folha de estilo antiga.
+/*.css
+  Cache-Control: public, max-age=0, must-revalidate
+
+/*.js
+  Cache-Control: public, max-age=0, must-revalidate
