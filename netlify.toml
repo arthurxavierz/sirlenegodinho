@@ -1,0 +1,61 @@
+# Sirlene Godinho 22310 - site estatico (sem build step)
+[build]
+  publish = "dist"
+  command = ""
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Seguranca
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=(), interest-cohort=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+
+# Assets versionados por caminho: cache longo
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# HTML sempre revalidado (evita servir versao antiga apos deploy)
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# CSS e JS ficam na raiz (fora de /assets): revalidam a cada visita, senao o
+# navegador serve o HTML novo com a folha de estilo antiga.
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# URLs limpas: /pautas -> /pautas.html
+[[redirects]]
+  from = "/sobre"
+  to = "/sobre.html"
+  status = 200
+[[redirects]]
+  from = "/pautas"
+  to = "/pautas.html"
+  status = 200
+[[redirects]]
+  from = "/comunicacao"
+  to = "/comunicacao.html"
+  status = 200
+
+# 404 personalizado
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404

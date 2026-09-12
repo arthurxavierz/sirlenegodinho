@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sirlenegodinho.achillesmedia.com.br/sitemap.xml
